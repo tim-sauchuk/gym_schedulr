@@ -8,10 +8,10 @@ body {
 }
 
 .hamburger_bar {
-  width: 35px;
-  height: 5px;
+  width: 70px;
+  height: 10px;
   background-color: #333;
-  margin: 6px 0;
+  margin: 9px 0;
 }
 
 .site_title {
