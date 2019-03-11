@@ -95,9 +95,17 @@ body {
   </script>
 
 <h1>Reserve</h1>
+
+<div id="dropdown">
+  <select>
+    <option value="volvo">Treadmills</option>
+    <option value="saab">Ellipticals</option>
+    <option value="opel">Squat Racks</option>
+  </select>
+</div>
+
 <div id="reservation_page">
 	<div id="reservation_page_top">
-		<h2>{Insert Machine Type From Previous Page}</h2>
 		<div id="reservation_page_date_picker">
 			<div class="reservation_page_date">
 				<label>From</label>
@@ -113,39 +121,38 @@ body {
 		<table style="width:100%">
 		  <tr>
 		    <th>Time</th>
-		    <th colspan="4">Machine Type</th>
+		    <th colspan="4">Machine</th>
 		  </tr>
-		  <tr>
-		    <td>1:00PM</td>
-		    <td onclick="reserve(this)">Tread1</td>
-		    <td>Tread2</td>
-		    <td>Tread3</td>
-		    <td>Tread4</td>
-		  </tr>
-		  <tr>
-		    <td>2:00PM</td>
-		    <td>Tread1</td>
-		    <td>Tread2</td>
-		    <td>Tread3</td>
-		    <td>Tread4</td>
-		  </tr>
-		  <tr>
-		    <td>3:00PM</td>
-		    <td>Tread1</td>
-		    <td>Tread2</td>
-		    <td>Tread3</td>
-		    <td>Tread4</td>
-		  </tr>
-		</table>
-		<button type="button">See More</button>
-		<!-- <button type="button">Reserve</button> -->
-	</div>
+      <td>1:00PM</td>
+      <td onclick="reserve(this)">Tread1</td>
+      <td onclick="reserve(this)">Tread2</td>
+      <td onclick="reserve(this)">Tread3</td>
+      <td onclick="reserve(this)">Tread4</td>
+    </tr>
+    <tr>
+      <td>2:00PM</td>
+      <td onclick="reserve(this)">Tread1</td>
+      <td onclick="reserve(this)">Tread2</td>
+      <td onclick="reserve(this)">Tread3</td>
+      <td onclick="reserve(this)">Tread4</td>
+    </tr>
+    <tr>
+      <td>3:00PM</td>
+      <td onclick="reserve(this)">Tread1</td>
+      <td onclick="reserve(this)">Tread2</td>
+      <td onclick="reserve(this)">Tread3</td>
+      <td onclick="reserve(this)">Tread4</td>
+    </tr>
+  </table>
+  <button type="button">See More</button>
+  <!-- <button type="button">Reserve</button> -->
+</div>
 </div>
 
 <script>
 function reserve(x) {
-  <!-- highlight row -->
-  alert("Booking successful for Tread1 at 2PM")
+// highlight row
+alert("Booking successful for " + x.innerHTML + " at 2 PM" )
 }
 </script>
 

@@ -79,3 +79,7 @@ a {
 .active {
   background-color: #383838;
 }
+
+#dropdown {
+	width: 10%;
+}
