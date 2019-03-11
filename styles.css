@@ -73,3 +73,7 @@ a {
 	display: flex;
 	flex-direction: row;
 }
+
+.active {
+  background-color: #383838;
+}
