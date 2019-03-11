@@ -117,7 +117,7 @@ body {
 		  </tr>
 		  <tr>
 		    <td>1:00PM</td>
-		    <td>Tread1</td>
+		    <td onclick="reserve(this)">Tread1</td>
 		    <td>Tread2</td>
 		    <td>Tread3</td>
 		    <td>Tread4</td>
@@ -138,9 +138,16 @@ body {
 		  </tr>
 		</table>
 		<button type="button">See More</button>
-		<button type="button">Reserve</button>
+		<!-- <button type="button">Reserve</button> -->
 	</div>
 </div>
+
+<script>
+function reserve(x) {
+  <!-- highlight row -->
+  alert("Booking successful for Tread1 at 2PM")
+}
+</script>
 
 </body>
 </html>
