@@ -63,9 +63,13 @@ a {
 	justify-content: space-between;
 }
 
+#reservation_page_bottom {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 .reservation_page_date {
 	display: flex;
 	flex-direction: row;
 }
-
-
