@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <title>Availability</title>
+  <script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
+  </script>
+  <script type = "text/javascript">
+    google.charts.load('current', {packages: ['corechart']});
+  </script>
+</head>
+<body>
+  <h1>Availability</h1>
+  <select id='machine_dropdown'>
+    <option value="All Machines" id='machine_type'>All Machines</option>
+    <option value="Treadmills" id='machine_type'>Treadmills</option>
+    <option value="Squat Racks" id='machine_type'>Squat Racks</option>
+    <option value="Stairmasters" id='machine_type'>Stairmasters</option>
+  </select>
+
+  <div id = "container" style = "width: 1900px; height: 1000px;">
+  </div>
+  <script language = "JavaScript">
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+      ['Time', 'Percentage of Machines in Use'],
+      ['5AM',  20],
+      ['6AM',  30],
+      ['7AM',  60],
+      ['8AM',  60],
+      ['9AM',  45],
+      ['10AM', 45],
+      ['11AM', 40],
+      ['12PM', 30],
+      ['1PM', 35],
+      ['2PM', 45],
+      ['3PM', 50],
+      ['4PM', 55],
+      ['5PM', 55],
+      ['6PM', 70],
+      ['7PM', 100],
+      ['8PM', 80],
+      ['9PM', 70],
+      ['10PM', 55],
+      ['11PM', 40],
+      ['12AM', 25],
+      ['1AM', 10]
+      ]);
+
+      var view = new google.visualization.DataView(data);
+
+      document.getElementById('machine_type').onclick=function() {
+        var data = google.visualization.arrayToDataTable([
+        ['Time', 'Percentage of Machines in Use'],
+        ['5AM',  20],
+        ['6AM',  100],
+        ['7AM',  60],
+        ['8AM',  60],
+        ['9AM',  45],
+        ['10AM', 45],
+        ['11AM', 40],
+        ['12PM', 30],
+        ['1PM', 35],
+        ['2PM', 25],
+        ['3PM', 50],
+        ['4PM', 55],
+        ['5PM', 0],
+        ['6PM', 70],
+        ['7PM', 90],
+        ['8PM', 80],
+        ['9PM', 70],
+        ['10PM', 55],
+        ['11PM', 40],
+        ['12AM', 25],
+        ['1AM', 10]
+        ]);
+
+        var options = {
+          title: '',
+          bar: {groupWidth: "97%"},
+          legend: { position: "none" },
+        };
+
+        var view = new google.visualization.DataView(data);
+        chart.draw(view, options);
+      }
+
+      var options = {
+        title: 'Percentage of Machines in Use',
+        bar: {groupWidth: "97%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById('container'));
+      chart.draw(view, options);
+    }
+    google.charts.setOnLoadCallback(drawChart);
+  </script>
+</body>
+</html>
