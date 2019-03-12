@@ -23,9 +23,9 @@ export class ReservationsComponent implements OnInit {
     this.type = this.route.snapshot.paramMap.get("type");
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
     this.machineData = [
-      {time: this.timeSlots[0], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4', 'Tread5']},
+      {time: this.timeSlots[0], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4']},
       {time: this.timeSlots[1], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4', 'Tread5']},
-      {time: this.timeSlots[2], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4', 'Tread5']}
+      {time: this.timeSlots[2], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4']}
     ]
   }
 

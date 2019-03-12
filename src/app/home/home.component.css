@@ -1,27 +1,48 @@
 .home_page_machines {
-  display: flex;
-  flex-direction: column;
+  margin: auto;
+  width: 90%;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+  border-left: 2px solid;
 }
 
 .home_page_machine {
-  height: 100px;
+  height: 120px;
   border-top: 2px solid;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  text-align: left;
   justify-content: space-between;
 }
 
+.home_page_machine:hover {
+  cursor: pointer;
+  background-color: rgba(30, 154, 235, .1)
+}
+
 .machine_title {
-  font-size: 48px;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 10px;
+  width: 300px;
+  font-size: 40px;
 }
 
 .machine_icon {
+  border: 2px solid gray;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
   width: 100px;
   height: 100px;
+  padding-bottom: 5px;
 }
 
 .machine_availability {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 300px;
+  padding-right: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;

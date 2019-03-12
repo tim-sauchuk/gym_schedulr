@@ -1,16 +1,14 @@
 <h1>Reserve</h1>
-
-<div id="dropdown">
-  <select>
-    <option selected>{{type}}</option>
-    <option value="volvo">Treadmills</option>
-    <option value="saab">Ellipticals</option>
-    <option value="opel">Squat Racks</option>
-  </select>
-</div>
-
 <div id="reservation_page">
-  <div id="reservation_page_top">
+  <div class="page-top">
+    <div id="dropdown">
+      <select>
+        <option selected>{{type}}</option>
+        <option value="volvo">Treadmills</option>
+        <option value="saab">Ellipticals</option>
+        <option value="opel">Squat Racks</option>
+      </select>
+    </div>
     <div id="reservation_page_date_picker">
       <div class="reservation_page_date">
         <label>From</label>
@@ -22,12 +20,10 @@
       </div>
     </div>
   </div>
-  <div id="reservation_page_bottom">
-    <table style="width:100%">
-      <tr>
-        <th>Time</th>
-        <th colspan="4">Machine</th>
-      </tr>
+  <div id="reservation_page_bottom" class="large-table">
+    <table>
+      <th colspan="1">Time</th>
+      <th colspan="4">Available Machines</th>
       <tr *ngFor="let time of getTimeSlots()">
         <td>{{time}}</td>
         <td *ngFor="let machine of getMachinesByTime(time)" (click)="reserve(machine, time)">
@@ -35,8 +31,8 @@
         </td>
       </tr>
     </table>
-    <button *ngIf="page > 0"type="button" (click)="lastPage()">See Previous</button>
     <button type="button" (click)="nextPage()">See More</button>
-     <button type="button">Reserve</button>
+    <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
+    <button type="button">Reserve</button>
   </div>
 </div>
