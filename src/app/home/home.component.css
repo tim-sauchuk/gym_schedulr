@@ -15,9 +15,9 @@
   justify-content: space-between;
 }
 
-.home_page_machine:hover {
+.home_page_machine:hover  {
   cursor: pointer;
-  background-color: rgba(30, 154, 235, .1)
+  background-color: rgba(30, 154, 255, .1)
 }
 
 .machine_title {

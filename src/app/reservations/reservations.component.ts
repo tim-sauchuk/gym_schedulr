@@ -11,9 +11,10 @@ export class ReservationsComponent implements OnInit {
   public type: string;
   //correlates to the seeMore pages
   public page: number;
-  private machineData: ({ time: string; machines: string[] })[];
+  private machineData: ({ time: boolean; machines: any[] })[];
   private timeSlots: string[];
   private machinesPerPage: number;
+  private selectedMachines: any[];
 
   constructor(private route: ActivatedRoute) { }
 
@@ -22,15 +23,33 @@ export class ReservationsComponent implements OnInit {
     this.machinesPerPage = 4;
     this.type = this.route.snapshot.paramMap.get("type");
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
-    this.machineData = [
-      {time: this.timeSlots[0], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4']},
-      {time: this.timeSlots[1], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4', 'Tread5']},
-      {time: this.timeSlots[2], machines: ['Tread1', 'Tread2', 'Tread3', 'Tread4']}
-    ]
+    this.machineData = this.generateMachineData(this.timeSlots, 'Treadmill');
+    this.selectedMachines = [];
+  }
+
+  private generateMachineData(timeSlots, type): ({ time: boolean; machines: any[] })[] {
+    const machineData = [];
+    _.forEach(timeSlots, (slot) => {
+      const machines = [];
+      for (let i = 0; i < 4; i ++) {
+        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + slot})
+      }
+      machineData.push({time: slot, machines: machines})
+    });
+
+    return machineData;
   }
 
   public getTimeSlots() {
     return this.timeSlots;
+  }
+
+  public toggleSelection(machine) {
+    if (machine.available) {
+      machine.isSelected = !machine.isSelected;
+      (machine.isSelected) ? this.selectedMachines.push(machine) :
+        _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
+    }
   }
 
   public nextPage() {
@@ -42,8 +61,18 @@ export class ReservationsComponent implements OnInit {
     return _.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines').slice(startIndex, startIndex + 4);
   }
 
-  public reserve(name, time) {
-    alert("Booking successful for " + name + " at " + time);
+  public reserve() {
+    //post to DB reservation
+    const selected = this.selectedMachines.slice();
+    const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
+    _.forEach((selected), (selectedMachine) => {
+      const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
+      this.toggleSelection(machine);
+      machine.available = false;
+    });
+
+
+    alert("Booking successful for: " + _.uniq(_.map(this.selectedMachines, (machine) => machine.name)).join(', '));
   }
 
   public lastPage() {

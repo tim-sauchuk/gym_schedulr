@@ -26,13 +26,15 @@
       <th colspan="4">Available Machines</th>
       <tr *ngFor="let time of getTimeSlots()">
         <td>{{time}}</td>
-        <td *ngFor="let machine of getMachinesByTime(time)" (click)="reserve(machine, time)">
-          {{machine}}
+        <td *ngFor="let machine of getMachinesByTime(time)" (click)="toggleSelection(machine)" [ngClass]="machine.isSelected ? 'selected' : 'notSelected'">
+          <div *ngIf="machine.available">
+            {{machine.name}}
+          </div>
         </td>
       </tr>
     </table>
     <button type="button" (click)="nextPage()">See More</button>
     <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
-    <button type="button">Reserve</button>
+    <button type="button" (click)="reserve()">Reserve</button>
   </div>
 </div>
