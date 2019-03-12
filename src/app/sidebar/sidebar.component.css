@@ -63,14 +63,3 @@ a {
   color: black;
   text-decoration: none;
 }
-
-.hamburger_icon {
-  display: inline-block;
-}
-
-.hamburger_bar {
-  width: 70px;
-  height: 10px;
-  background-color: #333;
-  margin: 9px 0;
-}

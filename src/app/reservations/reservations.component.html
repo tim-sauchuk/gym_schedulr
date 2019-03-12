@@ -28,27 +28,15 @@
         <th>Time</th>
         <th colspan="4">Machine</th>
       </tr>
-      <td>1:00PM</td>
-      <td onclick="reserve(this)">Tread1</td>
-      <td onclick="reserve(this)">Tread2</td>
-      <td onclick="reserve(this)">Tread3</td>
-      <td onclick="reserve(this)">Tread4</td>
-      <tr>
-        <td>2:00PM</td>
-        <td onclick="reserve(this)">Tread1</td>
-        <td onclick="reserve(this)">Tread2</td>
-        <td onclick="reserve(this)">Tread3</td>
-        <td onclick="reserve(this)">Tread4</td>
-      </tr>
-      <tr>
-        <td>3:00PM</td>
-        <td onclick="reserve(this)">Tread1</td>
-        <td onclick="reserve(this)">Tread2</td>
-        <td onclick="reserve(this)">Tread3</td>
-        <td onclick="reserve(this)">Tread4</td>
+      <tr *ngFor="let time of getTimeSlots()">
+        <td>{{time}}</td>
+        <td *ngFor="let machine of getMachinesByTime(time)" (click)="reserve(machine, time)">
+          {{machine}}
+        </td>
       </tr>
     </table>
-    <button type="button">See More</button>
+    <button *ngIf="page > 0"type="button" (click)="lastPage()">See Previous</button>
+    <button type="button" (click)="nextPage()">See More</button>
      <button type="button">Reserve</button>
   </div>
 </div>
