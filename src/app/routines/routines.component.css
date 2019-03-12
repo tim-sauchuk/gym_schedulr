@@ -1,0 +1,22 @@
+#reservation_page {
+  display: flex;
+  flex-direction: column;
+}
+
+#reservation_page_top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: auto;
+  padding: 20px;
+}
+
+#reservation_page_bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reservation-page-date {
+  margin: auto;
+}
