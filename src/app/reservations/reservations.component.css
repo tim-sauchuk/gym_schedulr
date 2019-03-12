@@ -1,0 +1,41 @@
+#reservation_page {
+  display: flex;
+  flex-direction: column;
+}
+
+#reservation_page_bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reservation_page_date {
+  display: flex;
+  flex-direction: row;
+}
+
+.large-table {
+  width: 90%;
+  margin:auto;
+}
+
+button {
+  width: 75px;
+}
+
+table {
+  margin: auto;
+  width: 90%;
+}
+th {
+  border: 1px solid black;
+}
+
+select {
+  margin-bottom: 5px;
+  width: 195px;
+}
+
+.selected {
+  background-color: rgba(30, 154, 255, .1)
+}

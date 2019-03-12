@@ -1,0 +1,10 @@
+.chart-container {
+  margin:auto;
+  width: 1500px;
+  height: 500px;
+}
+
+select {
+  margin: auto;
+  width: 300px;
+}
