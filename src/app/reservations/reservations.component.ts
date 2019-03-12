@@ -23,7 +23,7 @@ export class ReservationsComponent implements OnInit {
     this.machinesPerPage = 4;
     this.type = this.route.snapshot.paramMap.get("type");
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
-    this.machineData = this.generateMachineData(this.timeSlots, 'Treadmill', 5);
+    this.machineData = this.generateMachineData(this.timeSlots, this.type, 5);
     this.selectedMachines = [];
   }
 
