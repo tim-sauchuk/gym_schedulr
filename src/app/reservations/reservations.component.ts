@@ -64,15 +64,18 @@ export class ReservationsComponent implements OnInit {
   public reserve() {
     //post to DB reservation
     const selected = this.selectedMachines.slice();
-    const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
-    _.forEach((selected), (selectedMachine) => {
-      const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
-      this.toggleSelection(machine);
-      machine.available = false;
-    });
+
+    if (selected.length) {
+      const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
+      _.forEach((selected), (selectedMachine) => {
+        const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
+        this.toggleSelection(machine);
+        machine.available = false;
+      });
 
 
-    alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.name)).join(', '));
+      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.name)).join(', '));
+    }
   }
 
   public lastPage() {
