@@ -23,15 +23,15 @@ export class ReservationsComponent implements OnInit {
     this.machinesPerPage = 4;
     this.type = this.route.snapshot.paramMap.get("type");
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
-    this.machineData = this.generateMachineData(this.timeSlots, 'Treadmill');
+    this.machineData = this.generateMachineData(this.timeSlots, 'Treadmill', 5);
     this.selectedMachines = [];
   }
 
-  private generateMachineData(timeSlots, type): ({ time: boolean; machines: any[] })[] {
+  private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
     const machineData = [];
     _.forEach(timeSlots, (slot) => {
       const machines = [];
-      for (let i = 0; i < 4; i ++) {
+      for (let i = 0; i < num; i ++) {
         machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + slot})
       }
       machineData.push({time: slot, machines: machines})
@@ -72,7 +72,7 @@ export class ReservationsComponent implements OnInit {
     });
 
 
-    alert("Booking successful for: " + _.uniq(_.map(this.selectedMachines, (machine) => machine.name)).join(', '));
+    alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.name)).join(', '));
   }
 
   public lastPage() {
