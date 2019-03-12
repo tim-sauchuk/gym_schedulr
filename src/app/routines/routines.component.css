@@ -13,7 +13,6 @@ body {
   transition: 0.5s;
   padding-top: 60px;
 }
-
 .sidebar a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
@@ -40,7 +39,6 @@ body {
   padding: 10px 15px;
   border: none;
 }
-
 .openbtn:hover {
   background-color: #444;
 }
@@ -48,29 +46,7 @@ body {
   transition: margin-left .5s;
   padding: 16px;
 }
-
 @media screen and (max-height: 450px) {
   .sidebar {padding-top: 15px;}
   .sidebar a {font-size: 18px;}
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
-.hamburger_icon {
-  display: inline-block;
-}
-
-.hamburger_bar {
-  width: 70px;
-  height: 10px;
-  background-color: #333;
-  margin: 9px 0;
 }

@@ -22,7 +22,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/app/styles.css"
+              "src/styles.css"
             ],
             "scripts": [],
           },
@@ -80,7 +80,8 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"

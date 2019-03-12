@@ -1,0 +1,54 @@
+<h1>Reserve</h1>
+
+<div id="dropdown">
+  <select>
+    <option selected>{{type}}</option>
+    <option value="volvo">Treadmills</option>
+    <option value="saab">Ellipticals</option>
+    <option value="opel">Squat Racks</option>
+  </select>
+</div>
+
+<div id="reservation_page">
+  <div id="reservation_page_top">
+    <div id="reservation_page_date_picker">
+      <div class="reservation_page_date">
+        <label>From</label>
+        <input type="date" name="from_date">
+      </div>
+      <div class="reservation_page_date">
+        <label>To</label>
+        <input type="date" name="to_date">
+      </div>
+    </div>
+  </div>
+  <div id="reservation_page_bottom">
+    <table style="width:100%">
+      <tr>
+        <th>Time</th>
+        <th colspan="4">Machine</th>
+      </tr>
+      <td>1:00PM</td>
+      <td onclick="reserve(this)">Tread1</td>
+      <td onclick="reserve(this)">Tread2</td>
+      <td onclick="reserve(this)">Tread3</td>
+      <td onclick="reserve(this)">Tread4</td>
+      <tr>
+        <td>2:00PM</td>
+        <td onclick="reserve(this)">Tread1</td>
+        <td onclick="reserve(this)">Tread2</td>
+        <td onclick="reserve(this)">Tread3</td>
+        <td onclick="reserve(this)">Tread4</td>
+      </tr>
+      <tr>
+        <td>3:00PM</td>
+        <td onclick="reserve(this)">Tread1</td>
+        <td onclick="reserve(this)">Tread2</td>
+        <td onclick="reserve(this)">Tread3</td>
+        <td onclick="reserve(this)">Tread4</td>
+      </tr>
+    </table>
+    <button type="button">See More</button>
+     <button type="button">Reserve</button>
+  </div>
+</div>

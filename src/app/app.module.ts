@@ -7,6 +7,8 @@ import { ReservationsComponent } from './reservations/reservations.component';
 import { RoutinesComponent } from './routines/routines.component';
 import { AvailabilityComponent } from './availability/availability.component';
 import { HomeComponent } from './home/home.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { HomeComponent } from './home/home.component';
     ReservationsComponent,
     RoutinesComponent,
     AvailabilityComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

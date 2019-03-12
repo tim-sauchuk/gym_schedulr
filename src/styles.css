@@ -1,0 +1,85 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.hamburger_icon {
+  display: inline-block;
+}
+
+.hamburger_bar {
+  width: 70px;
+  height: 10px;
+  background-color: #333;
+  margin: 9px 0;
+}
+
+.site_title {
+  align-self: center;
+}
+
+.home_page_machines {
+  display: flex;
+  flex-direction: column;
+}
+
+.home_page_machine {
+  height: 100px;
+  border-top: 2px solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 7.5%;
+  padding-right: 7.5%;
+}
+
+.machine_title {
+  font-size: 48px;
+}
+
+.machine_icon {
+  width: 100px;
+  height: 100px;
+}
+
+.machine_availability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#reservation_page {
+  display: flex;
+  flex-direction: column;
+}
+
+#reservation_page_top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#reservation_page_bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.reservation_page_date {
+  display: flex;
+  flex-direction: row;
+}
+
+.active {
+  background-color: #383838;
+}
+
+#dropdown {
+  width: 10%;
+}

@@ -11,8 +11,16 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: 'home',
+    component: HomeComponent
+  },
+  {
+    path: 'reservations/:type',
+    component: ReservationsComponent
+  },
+  {
     path: 'reservations',
-    component: ReservationsComponent,
+    component: ReservationsComponent
   },
   {
     path: 'routines',
