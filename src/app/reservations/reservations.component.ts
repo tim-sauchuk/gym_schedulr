@@ -8,9 +8,9 @@ import * as _ from 'lodash';
   styleUrls: ['./reservations.component.css']
 })
 export class ReservationsComponent implements OnInit {
-  private type: string;
+  public type: string;
   //correlates to the seeMore pages
-  private page: number;
+  public page: number;
   private machineData: ({ time: string; machines: string[] })[];
   private timeSlots: string[];
   private machinesPerPage: number;
