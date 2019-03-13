@@ -10,6 +10,7 @@ export class RoutinesComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    document.getElementById('datePicker').valueAsDate = new Date();
   }
 
 }
