@@ -3,3 +3,16 @@ dbname: d6t9tb7045q9k8
 user: bzjenrvuniyeuf
 host: ec2-54-221-243-211.compute-1.amazonaws.com
 password: 4e7070c0d8584c74e64688cfa6960bd4f5c0ffae596aa95e1503f88cddbf1c1d
+
+# RESERVATIONS TABLE #
+Columns:
+- id (int, primary key)
+- machine id (int, foreign key to "machines" table)
+- user_id (int, starting with 1)
+- start_time (timestamp)
+- end_time (timestamp)
+
+# MACHINES TABLE #
+- id (int, primary key)
+- machine_type (varchar(30))
+- machine_type_id (int, unique id within its machine_type)
