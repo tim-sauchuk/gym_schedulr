@@ -23,12 +23,22 @@
   <div id="reservation_page_bottom" class="large-table">
     <table>
       <th colspan="1">Time</th>
-      <th colspan="4">Available Machines</th>
+      <th *ngFor="let machine of getChunkedMachines()">
+        {{machine.name}}
+      </th>
       <tr *ngFor="let time of getTimeSlots()">
         <td>{{time}}</td>
-        <td *ngFor="let machine of getMachinesByTime(time)" (click)="toggleSelection(machine)" [ngClass]="machine.isSelected ? 'selected' : 'notSelected'">
+        <td *ngFor="let machine of getMachinesByTime(time)" (click)="toggleSelection(machine)" [ngClass]="{selected: machine.isSelected, selectable: machine.available}">
           <div *ngIf="machine.available">
-            {{machine.name}}
+            <p>
+              <span class="check">&#10004; </span>
+              <span>Open</span>
+            </p>
+          </div>
+          <div *ngIf="!machine.available">
+            <p>
+              <span class="x">&#x2717; </span>
+            </p>
           </div>
         </td>
       </tr>

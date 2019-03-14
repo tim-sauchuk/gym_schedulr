@@ -36,6 +36,18 @@ select {
   width: 195px;
 }
 
-.selected {
+.check {
+  color: lawngreen;
+}
+
+.x {
+  color: darkred;
+}
+
+td.selectable:hover {
   background-color: rgba(30, 154, 255, .1)
+}
+
+.selected {
+  background-color: rgba(30, 154, 255, .3) !important;
 }

@@ -56,6 +56,11 @@ export class ReservationsComponent implements OnInit {
     this.page++;
   }
 
+  public getChunkedMachines() {
+    const startIndex = this.page * this.machinesPerPage;
+    return _.get(this.machineData[0], 'machines').slice(startIndex, startIndex + 4);
+  }
+
   public getMachinesByTime(givenTime) {
     const startIndex = this.page * this.machinesPerPage;
     return _.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines').slice(startIndex, startIndex + 4);
