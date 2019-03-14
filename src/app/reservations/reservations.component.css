@@ -37,7 +37,7 @@ select {
 }
 
 .check {
-  color: lawngreen;
+  color: #59b100;
 }
 
 .x {
@@ -49,5 +49,5 @@ td.selectable:hover {
 }
 
 .selected {
-  background-color: rgba(30, 154, 255, .3) !important;
+  background-color: rgba(30, 154, 255, .2) !important;
 }
