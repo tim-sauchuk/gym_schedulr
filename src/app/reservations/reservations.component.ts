@@ -38,7 +38,7 @@ export class ReservationsComponent implements OnInit {
     _.forEach(timeSlots, (slot) => {
       const machines = [];
       for (let i = 0; i < num; i ++) {
-        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + " " + slot})
+        machines.push({name: type + i, time: slot, isSelected: false, available: true, reservationUid: type + i + " " + slot})
       }
       machineData.push({time: slot, machines: machines})
     });
@@ -51,11 +51,10 @@ export class ReservationsComponent implements OnInit {
   }
 
   public toggleSelection(machine) {
-    machine.isSelected = !machine.isSelected;
-    (machine.isSelected) ? this.selectedMachines.push(machine) :
-      _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
+    let time_conflict = false;
+    _.forEach(this.selectedMachines, (sel_machine) => {if (sel_machine.time == machine.time && sel_machine.name != machine.name) { time_conflict = true;}})
 
-    if (machine.available) {
+    if (machine.available && !time_conflict) {
       machine.isSelected = !machine.isSelected;
       if (machine.isSelected) {
         this.selectedMachines.push(machine)
