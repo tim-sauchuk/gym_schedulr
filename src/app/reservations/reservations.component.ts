@@ -51,8 +51,19 @@ export class ReservationsComponent implements OnInit {
   public toggleSelection(machine) {
     if (machine.available) {
       machine.isSelected = !machine.isSelected;
-      (machine.isSelected) ? this.selectedMachines.push(machine) :
+      if (machine.isSelected) {
+        this.selectedMachines.push(machine)
+      } else {
         _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
+      }
+
+      const selected = this.selectedMachines.slice();
+      const x = document.getElementById("reserve_button");
+      if (selected.length) {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
     }
   }
 
