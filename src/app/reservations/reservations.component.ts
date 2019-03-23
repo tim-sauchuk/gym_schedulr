@@ -111,6 +111,10 @@ export class ReservationsComponent implements OnInit {
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
       _.forEach((selected), (selectedMachine) => {
         const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
+        if (machine.available) {
+          alert("Cannot undo a reservation for an open machine.")
+          return;
+        }
         this.toggleSelection(machine);
         machine.available = !machine.available;
 
