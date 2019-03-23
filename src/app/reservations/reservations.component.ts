@@ -54,7 +54,7 @@ export class ReservationsComponent implements OnInit {
     let time_conflict = false;
     _.forEach(this.selectedMachines, (sel_machine) => {if (sel_machine.time == machine.time && sel_machine.name != machine.name) { time_conflict = true;}})
 
-    if (machine.available && !time_conflict) {
+    if (!time_conflict) {
       machine.isSelected = !machine.isSelected;
       if (machine.isSelected) {
         this.selectedMachines.push(machine)
