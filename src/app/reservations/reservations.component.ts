@@ -91,21 +91,30 @@ export class ReservationsComponent implements OnInit {
     const selected = this.selectedMachines.slice();
 
     if (selected.length) {
+      var flag = false;
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
       _.forEach((selected), (selectedMachine) => {
         const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
-        this.toggleSelection(machine);
-        machine.available = !machine.available;
+        if(machine.available){
+          this.toggleSelection(machine);
+          machine.available = !machine.available;
 
-        this.reservations_made++;
+          this.reservations_made++;
+        } else{
+          flag = true;
+        }
       });
-
-      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', ') + "\nYou can view your reservation in the Routines page!");
+      if (flag) {
+        alert("Cannot reserve machines that have already been reserved.")
+      } else {
+        alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', ') + "\nYou can view your reservation in the Routines page!");
+      }
     }
   }
 
   public undoReserve() {
     const selected = this.selectedMachines.slice();
+    var flag = false;
 
     if (selected.length) {
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
@@ -113,15 +122,16 @@ export class ReservationsComponent implements OnInit {
         const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
         if (machine.available) {
           alert("Cannot undo a reservation for an open machine.")
-          return;
+          flag = true;
+        } else {
+          this.toggleSelection(machine);
+          machine.available = !machine.available;
+          this.reservations_made -= 1;
         }
-        this.toggleSelection(machine);
-        machine.available = !machine.available;
-
-        this.reservations_made -= 1;
       });
-
-      alert("Reservation undone for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
+      if (!flag){
+        alert("Reservation undone for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
+      }
     }
   }
 
