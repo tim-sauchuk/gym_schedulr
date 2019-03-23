@@ -15,7 +15,8 @@ export class ReservationsComponent implements OnInit {
   private timeSlots: string[];
   private machinesPerPage: number;
   private selectedMachines: any[];
-  public current_date: string;
+  public from_date: string;
+  public to_date: string;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -26,7 +27,8 @@ export class ReservationsComponent implements OnInit {
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
     this.machineData = this.generateMachineData(this.timeSlots, this.type, 5);
     this.selectedMachines = [];
-    this.current_date = new Date().toISOString().slice(0, 10);
+    this.from_date = new Date().toISOString().slice(0, 10);
+    this.to_date = new Date().toISOString().slice(0, 10);
   }
 
   private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
@@ -34,7 +36,7 @@ export class ReservationsComponent implements OnInit {
     _.forEach(timeSlots, (slot) => {
       const machines = [];
       for (let i = 0; i < num; i ++) {
-        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + slot})
+        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + " " + slot})
       }
       machineData.push({time: slot, machines: machines})
     });
@@ -80,8 +82,7 @@ export class ReservationsComponent implements OnInit {
         machine.available = false;
       });
 
-
-      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.name)).join(', '));
+      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
     }
   }
 

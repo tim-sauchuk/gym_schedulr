@@ -6,12 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./routines.component.css']
 })
 export class RoutinesComponent implements OnInit {
+	public _date: string;
 
   constructor() { }
 
   ngOnInit() {
-    //casting to input element type
-    (<HTMLInputElement> document.getElementById('datePicker')).valueAsDate = new Date();
+    this._date = new Date().toISOString().slice(0, 10);
   }
 
 }
