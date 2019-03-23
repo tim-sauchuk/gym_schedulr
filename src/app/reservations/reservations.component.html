@@ -4,9 +4,9 @@
     <div id="dropdown">
       <select>
         <option selected>All Machines</option>
-        <option value="volvo">Treadmills</option>
-        <option value="saab">Ellipticals</option>
-        <option value="opel">Squat Racks</option>
+        <option value="treadmills">Treadmills</option>
+        <option value="eilliptcals">Ellipticals</option>
+        <option value="squat_racks">Squat Racks</option>
       </select>
     </div>
     <div id="reservation_page_date_picker">
@@ -36,7 +36,7 @@
             </p>
           </div>
           <div *ngIf="!machine.available">
-            <p>
+            <p>s
               <span class="x">&#x2717; </span>
             </p>
           </div>
@@ -46,5 +46,6 @@
     <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
     <button type="button" (click)="nextPage()">See More</button>
     <button type="button" (click)="reserve()">Reserve</button>
+    <button *ngIf="reservations_made > 0" type="button" (click)="undoReserve()">Undo Reserve.</button>
   </div>
 </div>

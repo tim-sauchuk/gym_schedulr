@@ -17,6 +17,7 @@ export class ReservationsComponent implements OnInit {
   private selectedMachines: any[];
   public from_date: string;
   public to_date: string;
+  public reservations_made: number;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -29,6 +30,7 @@ export class ReservationsComponent implements OnInit {
     this.selectedMachines = [];
     this.from_date = new Date().toISOString().slice(0, 10);
     this.to_date = new Date().toISOString().slice(0, 10);
+    this.reservations_made = 0;
   }
 
   private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
@@ -49,11 +51,9 @@ export class ReservationsComponent implements OnInit {
   }
 
   public toggleSelection(machine) {
-    if (machine.available) {
-      machine.isSelected = !machine.isSelected;
-      (machine.isSelected) ? this.selectedMachines.push(machine) :
-        _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
-    }
+    machine.isSelected = !machine.isSelected;
+    (machine.isSelected) ? this.selectedMachines.push(machine) :
+      _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
   }
 
   public nextPage() {
@@ -79,10 +79,29 @@ export class ReservationsComponent implements OnInit {
       _.forEach((selected), (selectedMachine) => {
         const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
         this.toggleSelection(machine);
-        machine.available = false;
+        machine.available = !machine.available;
+
+        this.reservations_made++;
       });
 
       alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
+    }
+  }
+
+  public undoReserve() {
+    const selected = this.selectedMachines.slice();
+
+    if (selected.length) {
+      const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
+      _.forEach((selected), (selectedMachine) => {
+        const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
+        this.toggleSelection(machine);
+        machine.available = !machine.available;
+
+        this.reservations_made -= 1;
+      });
+
+      alert("Reservation undone for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
     }
   }
 
