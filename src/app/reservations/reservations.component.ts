@@ -15,6 +15,7 @@ export class ReservationsComponent implements OnInit {
   private timeSlots: string[];
   private machinesPerPage: number;
   private selectedMachines: any[];
+  public current_date: string;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -25,6 +26,7 @@ export class ReservationsComponent implements OnInit {
     this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
     this.machineData = this.generateMachineData(this.timeSlots, this.type, 5);
     this.selectedMachines = [];
+    this.current_date = new Date().toISOString().slice(0, 10);
   }
 
   private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
