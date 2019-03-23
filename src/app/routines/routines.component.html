@@ -18,20 +18,18 @@
   </div>
     <table class="table-style">
       <tr>
+        <th class="minus-column"></th>
         <th>Machine Name</th>
         <th>Time Span</th>
       </tr>
-      <tr>
-        <td>Tread1</td>
-        <td>7:30-8:30 AM</td>
-      </tr>
-      <tr>
-        <td>Squat3</td>
-        <td>8:00-8:10 AM</td>
-      </tr>
-      <tr>
-        <td>Elliptical6</td>
-        <td>8:10-8:30 AM</td>
+      <tr *ngFor="let machine of reservedMachines">
+        <td>
+          <button class="btn delete-button" (click)="remove(machine)">
+            <i class="fas fa-times"></i>
+          </button>
+        </td>
+        <td>{{machine.name}}</td>
+        <td>{{machine.time}}</td>
       </tr>
     </table>
 </div>

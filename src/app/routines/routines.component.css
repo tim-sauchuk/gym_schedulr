@@ -17,3 +17,12 @@
   background-color: #f2f2f2;
   color: rgb(30, 154, 255);
 }
+
+.delete-button {
+  color: rgb(30, 154, 255);
+  background-color: Transparent;
+}
+
+.minus-column {
+  width: 10%;
+}
