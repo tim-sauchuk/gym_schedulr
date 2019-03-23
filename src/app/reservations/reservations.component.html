@@ -47,5 +47,6 @@
     <button type="button" (click)="nextPage()">See More</button>
     <button type="button" (click)="reserve()">Reserve</button>
     <button *ngIf="reservations_made > 0" type="button" (click)="undoReserve()">Undo Reserve.</button>
+    <button id="reserve_button" type="button" (click)="reserve()" style="display: none;">Reserve</button>
   </div>
 </div>
