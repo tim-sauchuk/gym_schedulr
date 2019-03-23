@@ -93,7 +93,7 @@ export class ReservationsComponent implements OnInit {
         machine.available = false;
       });
 
-      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
+      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', ') + "\nYou can view your reservation in the Routines page!");
     }
   }
 
