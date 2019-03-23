@@ -36,7 +36,7 @@ export class ReservationsComponent implements OnInit {
     _.forEach(timeSlots, (slot) => {
       const machines = [];
       for (let i = 0; i < num; i ++) {
-        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + slot})
+        machines.push({name: type + i, isSelected: false, available: true, reservationUid: type + i + " " + slot})
       }
       machineData.push({time: slot, machines: machines})
     });
@@ -82,8 +82,7 @@ export class ReservationsComponent implements OnInit {
         machine.available = false;
       });
 
-
-      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.name)).join(', '));
+      alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
     }
   }
 
