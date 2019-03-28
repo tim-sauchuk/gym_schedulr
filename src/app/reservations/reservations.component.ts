@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-
+import {MachinesService} from '../machines.service';
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
@@ -19,31 +19,42 @@ export class ReservationsComponent implements OnInit {
   public to_date: string;
   public reservations_made: number;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private machinesService: MachinesService) { }
 
   ngOnInit() {
     this.page = 0;
     this.machinesPerPage = 4;
-    this.type = this.route.snapshot.paramMap.get("type");
-    this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
-    this.machineData = this.generateMachineData(this.timeSlots, this.type, 5);
+    this.type = this.route.snapshot.paramMap.get("type").toString();
+    this.timeSlots = [];
+    this.machineData = [];
+    this.generateMachineData(this.type);
     this.selectedMachines = [];
     this.from_date = new Date().toISOString().slice(0, 10);
     this.to_date = new Date().toISOString().slice(0, 10);
     this.reservations_made = 0;
   }
 
-  private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
-    const machineData = [];
-    _.forEach(timeSlots, (slot) => {
-      const machines = [];
-      for (let i = 0; i < num; i ++) {
-        machines.push({name: type + i, time: slot, isSelected: false, available: true, reservationUid: type + i + " " + slot})
-      }
-      machineData.push({time: slot, machines: machines})
+  private async generateMachineData(type) {
+    this.allMachines = await MachinesService.getMachines();
+    _.forEach(this.allMachines, (machine) => {
+      machine.name = `${machine.machine_type} ${machine.id}`;
+      machine.isSelected = false;
     });
 
-    return machineData;
+    this.filterVisibleMachines(type);
+  }
+
+  private async filterVisibleMachines(type): ({ time: boolean; machines: any[] })[] {
+    const machines = _.filter(this.allMachines, (machine) => machine.machine_type === type);
+
+    const machineData = [];
+    this.timeSlots = _.uniq(_.map(machines, (machine) => machine.time));
+    _.forEach(this.timeSlots, (slot) => {
+      const machinesForSlot = _.filter(machines, (machine) => (machine.time === slot));
+      machineData.push({time: slot, machines: machinesForSlot});
+    });
+
+    this.machineData = machineData;
   }
 
   public getTimeSlots() {
@@ -52,7 +63,7 @@ export class ReservationsComponent implements OnInit {
 
   public toggleSelection(machine) {
     let time_conflict = false;
-    _.forEach(this.selectedMachines, (sel_machine) => {if (sel_machine.time == machine.time && sel_machine.name != machine.name) { time_conflict = true;}})
+    _.forEach(this.selectedMachines, (sel_machine) => {if (sel_machine.time === machine.time && sel_machine.name !== machine.name) { time_conflict = true;}})
 
     if (!time_conflict) {
       machine.isSelected = !machine.isSelected;
@@ -77,13 +88,15 @@ export class ReservationsComponent implements OnInit {
   }
 
   public getChunkedMachines() {
-    const startIndex = this.page * this.machinesPerPage;
-    return _.get(this.machineData[0], 'machines').slice(startIndex, startIndex + 4);
+      const startIndex = this.page * this.machinesPerPage;
+      return _.slice(_.get(this.machineData[0], 'machines'), startIndex, startIndex + 4);
   }
 
   public getMachinesByTime(givenTime) {
-    const startIndex = this.page * this.machinesPerPage;
-    return _.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines').slice(startIndex, startIndex + 4);
+    if (this.machineData.length) {
+      const startIndex = this.page * this.machinesPerPage;
+      return _.slice(_.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines'), startIndex, startIndex + 4);
+    }
   }
 
   public reserve() {
@@ -95,7 +108,7 @@ export class ReservationsComponent implements OnInit {
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
       _.forEach((selected), (selectedMachine) => {
         const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
-        if(machine.available){
+        if(machine.available) {
           this.toggleSelection(machine);
           machine.available = !machine.available;
 
