@@ -62,7 +62,7 @@ export class ReservationsComponent implements OnInit {
     this.timeSlots = _.uniq(_.map(machines, (machine) => machine.time));
     _.forEach(this.timeSlots, (slot) => {
       const machinesForSlot = _.filter(machines, (machine) => (machine.time === slot));
-      machineData.push({time: slot, machines: _.sortBy(machinesForSlot, (machine) => machine.id)});
+      machineData.push({time: slot, machines: _.sortBy(machinesForSlot, (machine) => machine.id + machine.machine_type)});
     });
 
     this.machineData = machineData;
