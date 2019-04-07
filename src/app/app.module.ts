@@ -9,6 +9,7 @@ import { RoutinesComponent } from './routines/routines.component';
 import { AvailabilityComponent } from './availability/availability.component';
 import { HomeComponent } from './home/home.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { MapComponent } from './map/map.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     AvailabilityComponent,
     HomeComponent,
     SidebarComponent,
-    PolicyComponent
+    PolicyComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,

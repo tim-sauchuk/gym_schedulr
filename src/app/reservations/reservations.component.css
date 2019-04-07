@@ -92,3 +92,7 @@ td:hover {
 .selected {
   background-color: rgba(30, 154, 255, .2) !important;
 }
+
+img {
+  margin-left: 5%;
+}

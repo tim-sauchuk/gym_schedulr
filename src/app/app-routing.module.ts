@@ -5,6 +5,7 @@ import {ReservationsComponent} from "./reservations/reservations.component";
 import {RoutinesComponent} from "./routines/routines.component";
 import {AvailabilityComponent} from "./availability/availability.component";
 import {HomeComponent} from "./home/home.component";
+import {MapComponent} from "./map/map.component";
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
   {
     path: 'policy',
     component: PolicyComponent
+  },
+  {
+    path: 'map',
+    component: MapComponent
   }
 ];
 
