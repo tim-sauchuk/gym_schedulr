@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {PolicyComponent} from "./policy/policy.component";
 import {ReservationsComponent} from "./reservations/reservations.component";
 import {RoutinesComponent} from "./routines/routines.component";
 import {AvailabilityComponent} from "./availability/availability.component";
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'availability',
     component: AvailabilityComponent
+  },
+  {
+    path: 'policy',
+    component: PolicyComponent
   }
 ];
 

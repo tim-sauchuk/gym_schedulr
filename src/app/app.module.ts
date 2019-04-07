@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import {PolicyComponent} from "./policy/policy.component";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReservationsComponent } from './reservations/reservations.component';
@@ -17,7 +18,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     RoutinesComponent,
     AvailabilityComponent,
     HomeComponent,
-    SidebarComponent
+    SidebarComponent,
+    PolicyComponent
   ],
   imports: [
     BrowserModule,
