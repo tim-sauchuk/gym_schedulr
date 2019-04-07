@@ -43,9 +43,13 @@
         </td>
       </tr>
     </table>
-    <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
-    <button type="button" (click)="nextPage()">See More</button>
-    <button *ngIf="reservationsMade > 0" type="button" (click)="undoReserve()">Remove Reserve.</button>
-    <button id="reserve_button" type="button" (click)="reserve()" style="display: none;">Reserve</button>
+    <div id="reserve_page_buttons">
+      <div id="see_more_less_buttons">
+        <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
+        <button type="button" (click)="nextPage()">See More</button>
+      </div>
+      <button *ngIf="reservationsMade > 0" type="button" (click)="undoReserve()">Remove Reserve.</button>
+      <button id="reserve_button" type="button" (click)="reserve()" style="display: none;">Reserve</button>
+    </div>
   </div>
 </div>

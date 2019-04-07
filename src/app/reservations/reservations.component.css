@@ -9,6 +9,18 @@
   justify-content: space-between;
 }
 
+#reserve_page_buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+#see_more_less_buttons {
+  display: flex;
+  flex-direction: row;
+}
+
 .reservation_page_date {
   display: flex;
   flex-direction: row;
