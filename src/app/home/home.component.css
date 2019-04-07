@@ -53,9 +53,86 @@ h4 {
   padding-bottom: 5px;
 }
 
-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.btn-half {
+  margin:0 auto;
+  display:block;
+}
+
+.btn-full {
+  width:100%;
+}
+#reserve_page_buttons {
+  width:10%;
+  border: #111111;
+}
+
+#see_more_less_buttons {
+  margin:auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.btn {
   margin-bottom: 25px;
+  white-space:normal !important;
+  word-wrap: break-word;
+  background-color: rgba(30, 154, 255, .1)
+}
+
+.btn:disabled {
+  background-color: transparent;
+  color:lightgrey;
+}
+
+.reservation_table{
+  margin:auto;
+  width:90%;
+  text-align: center;
+}
+
+.reservation_page_date {
+  display: flex;
+  flex-direction: row;
+}
+
+.large-table {
+  width: 90%;
+  margin:auto;
+}
+
+button {
+  width: 75px;
+}
+
+table {
+  margin: auto;
+  width: 90%;
+}
+th {
+  border: 1px solid black;
+}
+
+select {
+  margin-bottom: 5px;
+  width: 195px;
+}
+
+.check {
+  color: #59b100;
+}
+
+.x {
+  color: darkred;
+}
+
+td:hover {
+  background-color: rgba(30, 154, 255, .1)
+}
+
+.selected {
+  background-color: rgba(30, 154, 255, .2) !important;
+}
+
+img {
+  margin-left: 5%;
 }
