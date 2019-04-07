@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from "lodash";
+import * as _ from 'lodash';
+import {MachinesService} from '../machines.service';
 
 @Component({
   selector: 'app-routines',
@@ -7,21 +8,19 @@ import * as _ from "lodash";
   styleUrls: ['./routines.component.css']
 })
 export class RoutinesComponent implements OnInit {
-	public _date: string;
-  public reservedMachines: any[];
+	public date: string;
+  public reservedMachines: any;
 
-  constructor() { }
+  constructor(private machinesService: MachinesService) { }
 
-  ngOnInit() {
-    this._date = new Date().toISOString().slice(0, 10);
-    this.reservedMachines = [
-      {name: "Tread1", time: "7:30-8:30 AM"},
-      {name: "Squat3", time: "8:00-8:10 AM"},
-      {name: "Elliptical6", time:"8:10-8:30 AM"}
-    ];
+  async ngOnInit() {
+    this.date = new Date().toISOString().slice(0, 10);
+    this.machinesService.getReservedMachines()
+      .then((response) => this.reservedMachines = response);
   }
 
-  remove(machine) {
-    _.remove(this.reservedMachines, (reservedMachine) => reservedMachine === machine);
+  async remove(machine) {
+    await this.machinesService.unreserveMachine(machine)
+      .then(() =>_.remove(this.reservedMachines, (reservedMachine) => reservedMachine === machine));
   }
 }

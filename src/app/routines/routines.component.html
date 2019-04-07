@@ -11,7 +11,7 @@
       <div class="reservation-page-date">
         <label>
           Date
-          <input type="date" name="_date" value="{{_date}}">
+          <input type="date" name="date" value="{{date}}">
         </label>
       </div>
     </div>
@@ -28,7 +28,7 @@
             <i class="fas fa-times"></i>
           </button>
         </td>
-        <td>{{machine.name}}</td>
+        <td>{{machine.machine_type}} {{machine.id}}</td>
         <td>{{machine.time}}</td>
       </tr>
     </table>

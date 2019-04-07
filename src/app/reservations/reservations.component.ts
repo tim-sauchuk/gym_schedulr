@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-
+import {MachinesService} from '../machines.service';
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.component.html',
@@ -9,41 +9,63 @@ import * as _ from 'lodash';
 })
 export class ReservationsComponent implements OnInit {
   public type: string;
-  //correlates to the seeMore pages
+  // correlates to the seeMore pages
   public page: number;
   private machineData: ({ time: boolean; machines: any[] })[];
   private timeSlots: string[];
   private machinesPerPage: number;
   private selectedMachines: any[];
-  public from_date: string;
-  public to_date: string;
-  public reservations_made: number;
+  public fromDate: string;
+  public toDate: string;
+  public reservationsMade: number;
+  private allMachines: any;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private machinesService: MachinesService) { }
 
   ngOnInit() {
     this.page = 0;
     this.machinesPerPage = 4;
-    this.type = this.route.snapshot.paramMap.get("type");
-    this.timeSlots = ['1:00pm', '2:00pm', '3:00pm'];
-    this.machineData = this.generateMachineData(this.timeSlots, this.type, 5);
+    this.type = this.route.snapshot.paramMap.get('type');
+    if (this.type) {
+      const select = document.getElementById('machine_dropdown') as HTMLSelectElement;
+      select.value = this.type;
+    }
+    this.timeSlots = [];
+    this.machineData = [];
     this.selectedMachines = [];
-    this.from_date = new Date().toISOString().slice(0, 10);
-    this.to_date = new Date().toISOString().slice(0, 10);
-    this.reservations_made = 0;
+    this.allMachines = [];
+    this.fromDate = new Date().toISOString().slice(0, 10);
+    this.toDate = new Date().toISOString().slice(0, 10);
+    this.reservationsMade = 0;
+    this.generateMachineData(this.type);
   }
 
-  private generateMachineData(timeSlots, type, num): ({ time: boolean; machines: any[] })[] {
-    const machineData = [];
-    _.forEach(timeSlots, (slot) => {
-      const machines = [];
-      for (let i = 0; i < num; i ++) {
-        machines.push({name: type + i, time: slot, isSelected: false, available: true, reservationUid: type + i + " " + slot})
-      }
-      machineData.push({time: slot, machines: machines})
+  private async generateMachineData(type): Promise<any> {
+    this.allMachines = await this.machinesService.getMachines();
+    _.forEach(this.allMachines, (machine) => {
+      machine.name = `${machine.machine_type} ${machine.id}`;
+      machine.isSelected = false;
     });
 
-    return machineData;
+    this.filterVisibleMachines(type);
+  }
+
+  private filterVisibleMachines(type): void {
+    let machines;
+    if (!type || type === 'all') {
+      machines = this.allMachines;
+    } else {
+      machines = _.filter(this.allMachines, (machine) => machine.machine_type === type);
+    }
+
+    const machineData = [];
+    this.timeSlots = _.uniq(_.map(machines, (machine) => machine.time));
+    _.forEach(this.timeSlots, (slot) => {
+      const machinesForSlot = _.filter(machines, (machine) => (machine.time === slot));
+      machineData.push({time: slot, machines: _.sortBy(machinesForSlot, (machine) => machine.id + machine.machine_type)});
+    });
+
+    this.machineData = machineData;
   }
 
   public getTimeSlots() {
@@ -51,23 +73,28 @@ export class ReservationsComponent implements OnInit {
   }
 
   public toggleSelection(machine) {
-    let time_conflict = false;
-    _.forEach(this.selectedMachines, (sel_machine) => {if (sel_machine.time == machine.time && sel_machine.name != machine.name) { time_conflict = true;}})
+    let timeConflict = false;
+    _.forEach(this.selectedMachines, (selMachine) => {
+      if (selMachine.time === machine.time && selMachine.machine_type !== machine.machine_type) {
+        timeConflict = true;
+      }});
 
-    if (!time_conflict) {
+    if (!timeConflict) {
       machine.isSelected = !machine.isSelected;
+
       if (machine.isSelected) {
-        this.selectedMachines.push(machine)
+        this.selectedMachines.push(machine);
       } else {
-        _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.reservationUid === machine.reservationUid);
+        _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.time === machine.time &&
+          selectedMachine.machine_type === machine.machine_type && selectedMachine.id === machine.id);
       }
 
       const selected = this.selectedMachines.slice();
-      const x = document.getElementById("reserve_button");
-      if (selected.length) {
-        x.style.display = "block";
+      const x = document.getElementById('reserve_button');
+      if (selected.length && _.some(this.selectedMachines,(sM) => sM.available)) {
+        x.style.display = 'block';
       } else {
-        x.style.display = "none";
+        x.style.display = 'none';
       }
     }
   }
@@ -77,62 +104,80 @@ export class ReservationsComponent implements OnInit {
   }
 
   public getChunkedMachines() {
-    const startIndex = this.page * this.machinesPerPage;
-    return _.get(this.machineData[0], 'machines').slice(startIndex, startIndex + 4);
+      const startIndex = this.page * this.machinesPerPage;
+      return _.slice(_.get(this.machineData[0], 'machines'), startIndex, startIndex + 4);
   }
 
   public getMachinesByTime(givenTime) {
-    const startIndex = this.page * this.machinesPerPage;
-    return _.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines').slice(startIndex, startIndex + 4);
+      const startIndex = this.page * this.machinesPerPage;
+      return _.slice(_.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines'), startIndex, startIndex + 4);
   }
 
-  public reserve() {
-    //post to DB reservation
+  public async reserve() {
+    // post to DB reservation
     const selected = this.selectedMachines.slice();
 
     if (selected.length) {
-      var flag = false;
+      let invalidReservations = false;
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
-      _.forEach((selected), (selectedMachine) => {
-        const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
-        if(machine.available){
+
+      _.forEach((selected), async (selectedMachine) => {
+        const machine = _.find(machines, (target) => target.machine_type === selectedMachine.machine_type &&
+          target.time === selectedMachine.time && target.id === selectedMachine.id);
+        if (machine.available) {
           this.toggleSelection(machine);
           machine.available = !machine.available;
 
-          this.reservations_made++;
-        } else{
-          flag = true;
+          await this.machinesService.reserveMachine(machine);
+          this.reservationsMade++;
+        } else {
+          invalidReservations = true;
         }
       });
-      if (flag) {
-        alert("Cannot reserve machines that have already been reserved.")
+
+      if (invalidReservations) {
+        alert('Cannot reserve machines that have already been reserved.');
       } else {
-        alert("Booking successful for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', ') + "\nYou can view your reservation in the Routines page!");
+        alert('Booking successful for: ' + _.uniq(_.map(selected, (machine) =>
+          `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n')
+          + '\nYou can view your reservation in the Routines page!');
       }
     }
   }
 
-  public undoReserve() {
+  public async undoReserve() {
     const selected = this.selectedMachines.slice();
-    var flag = false;
+    let flag = false;
 
     if (selected.length) {
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
-      _.forEach((selected), (selectedMachine) => {
-        const machine = _.find(machines, (machine) => machine.reservationUid === selectedMachine.reservationUid);
+
+      await _.forEach((selected), async (selectedMachine) => {
+        const machine = _.find(machines, (target) =>
+          target.type === selectedMachine.type && target.time === selectedMachine.time);
+
         if (machine.available) {
-          alert("Cannot undo a reservation for an open machine.")
+          alert('Cannot undo a reservation for an open machine.');
           flag = true;
         } else {
           this.toggleSelection(machine);
           machine.available = !machine.available;
-          this.reservations_made -= 1;
+
+          await this.machinesService.unreserveMachine(machine);
+          this.reservationsMade -= 1;
         }
       });
-      if (!flag){
-        alert("Reservation undone for: " + _.uniq(_.map(selected, (machine) => machine.reservationUid)).join(', '));
+      if (!flag) {
+        alert('Reservation undone for: ' + _.uniq(_.map(selected, (machine) =>
+          `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n'));
       }
     }
+  }
+
+  onSelect() {
+    const select = document.getElementById('machine_dropdown') as HTMLSelectElement;
+    const type = select.options[select.selectedIndex].value;
+    this.filterVisibleMachines(type);
   }
 
   public lastPage() {
