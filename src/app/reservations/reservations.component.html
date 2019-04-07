@@ -21,7 +21,7 @@
     </div>
   </div>
   <div id="reservation_page_bottom" class="large-table">
-    <table>
+    <table class="reservation_table">
       <th colspan="1">Time</th>
       <th *ngFor="let machine of getChunkedMachines()">
         {{machine.machine_type}} {{machine.id}}
@@ -45,11 +45,17 @@
     </table>
     <div id="reserve_page_buttons">
       <div id="see_more_less_buttons">
-        <button *ngIf="page > 0" type="button" (click)="lastPage()">See Previous</button>
-        <button type="button" (click)="nextPage()">See More</button>
+        <button class="btn btn-default btn-half" [disabled]="page <= 0" type="button" (click)="lastPage()">
+          <i class="fa fa-angle-left" aria-hidden="true"></i>
+          Last</button>
+        <button class="btn btn-default" type="button" (click)="nextPage()">
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+          Next</button>
       </div>
-      <button *ngIf="reservationsMade > 0" type="button" (click)="undoReserve()">Remove Reserve.</button>
-      <button id="reserve_button" type="button" (click)="reserve()" style="display: none;">Reserve</button>
+      <div class="rest-of-buttons">
+        <button class="btn btn-default btn-full" [disabled]="!showUndoReserve" type="button" (click)="undoReserve()">Remove Reserve</button>
+        <button class="btn btn-default btn-full" [disabled]="!showReserve" id="reserve_button" type="button" (click)="reserve()">Reserve</button>
+      </div>
     </div>
   </div>
 </div>

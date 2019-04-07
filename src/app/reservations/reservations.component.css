@@ -4,21 +4,50 @@
 }
 
 #reservation_page_bottom {
+  width:90%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
+.btn-half {
+}
+
+.btn-full {
+  width:100%;
+}
 #reserve_page_buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
+  width:10%;
+  border: #111111;
 }
 
 #see_more_less_buttons {
+  margin:auto;
   display: flex;
   flex-direction: row;
+}
+
+.rest-of-buttons {
+  text-align: center;
+}
+
+.btn {
+  margin-bottom: 10px;
+  white-space:normal !important;
+  word-wrap: break-word;
+  background-color: rgba(30, 154, 255, .1)
+}
+
+.btn:disabled {
+  background-color: transparent;
+  color:lightgrey;
+}
+
+
+.reservation_table{
+  margin:auto;
+  width:90%;
+  text-align: center;
 }
 
 .reservation_page_date {

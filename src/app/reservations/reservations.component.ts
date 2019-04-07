@@ -19,6 +19,8 @@ export class ReservationsComponent implements OnInit {
   public toDate: string;
   public reservationsMade: number;
   private allMachines: any;
+  private showReserve: boolean;
+  private showUndoReserve: boolean;
 
   constructor(private route: ActivatedRoute, private machinesService: MachinesService) { }
 
@@ -30,6 +32,7 @@ export class ReservationsComponent implements OnInit {
       const select = document.getElementById('machine_dropdown') as HTMLSelectElement;
       select.value = this.type;
     }
+    this.showReserve = false;
     this.timeSlots = [];
     this.machineData = [];
     this.selectedMachines = [];
@@ -94,12 +97,8 @@ export class ReservationsComponent implements OnInit {
       }
 
       const selected = this.selectedMachines.slice();
-      const x = document.getElementById('reserve_button');
-      if (selected.length && _.some(this.selectedMachines,(sM) => sM.available)) {
-        x.style.display = 'block';
-      } else {
-        x.style.display = 'none';
-      }
+      this.showReserve = selected.length && _.some(this.selectedMachines, (sM) => sM.available);
+      this.showUndoReserve = selected.length && _.some(this.selectedMachines, (sM) => !sM.available);
     }
   }
 
@@ -151,7 +150,7 @@ export class ReservationsComponent implements OnInit {
 
   public async undoReserve() {
     const selected = this.selectedMachines.slice();
-    
+
     if (selected.length) {
       if (_.some((selected), (selectedMachine) => (selectedMachine.available))) {
        return alert('Cannot undo a reservation for an open machine.');
