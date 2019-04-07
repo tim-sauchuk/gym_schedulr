@@ -151,27 +151,17 @@ export class ReservationsComponent implements OnInit {
 
   public async undoReserve() {
     const selected = this.selectedMachines.slice();
-    let flag = false;
-
+    
     if (selected.length) {
-      const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
-
-      await _.forEach((selected), async (selectedMachine) => {
-        const machine = _.find(machines, (target) => target.machine_type === selectedMachine.machine_type &&
-          target.time === selectedMachine.time && target.id === selectedMachine.id);
-
-        if (machine.available) {
-          alert('Cannot undo a reservation for an open machine.');
-          flag = true;
-        } else {
+      if (_.some((selected), (selectedMachine) => (selectedMachine.available))) {
+       return alert('Cannot undo a reservation for an open machine.');
+      } else {
+        _.forEach((selected), async (machine) => {
           this.toggleSelection(machine);
           machine.available = !machine.available;
 
           await this.machinesService.unreserveMachine(machine);
-          this.reservationsMade -= 1;
-        }
-      });
-      if (!flag) {
+        });
         alert('Reservation undone for: ' + _.uniq(_.map(selected, (machine) =>
           `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n'));
       }
