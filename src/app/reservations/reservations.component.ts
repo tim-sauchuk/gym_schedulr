@@ -36,17 +36,21 @@ export class ReservationsComponent implements OnInit {
     this.allMachines = [];
     this.fromDate = new Date().toISOString().slice(0, 10);
     this.toDate = new Date().toISOString().slice(0, 10);
-    this.reservationsMade = 0;
     this.generateMachineData(this.type);
   }
 
   private async generateMachineData(type): Promise<any> {
     this.allMachines = await this.machinesService.getMachines();
+    let numOfReservations = 0;
     _.forEach(this.allMachines, (machine) => {
+      if (!machine.available) {
+        numOfReservations++;
+      }
       machine.name = `${machine.machine_type} ${machine.id}`;
       machine.isSelected = false;
     });
 
+    this.reservationsMade = numOfReservations;
     this.filterVisibleMachines(type);
   }
 
@@ -153,8 +157,8 @@ export class ReservationsComponent implements OnInit {
       const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
 
       await _.forEach((selected), async (selectedMachine) => {
-        const machine = _.find(machines, (target) =>
-          target.type === selectedMachine.type && target.time === selectedMachine.time);
+        const machine = _.find(machines, (target) => target.machine_type === selectedMachine.machine_type &&
+          target.time === selectedMachine.time && target.id === selectedMachine.id);
 
         if (machine.available) {
           alert('Cannot undo a reservation for an open machine.');
