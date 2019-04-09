@@ -19,8 +19,8 @@ export class ReservationsComponent implements OnInit {
   public toDate: string;
   public reservationsMade: number;
   private allMachines: any;
-  private showReserve: boolean;
-  private showUndoReserve: boolean;
+  public showReserve: boolean;
+  public showUndoReserve: boolean;
   private reservations: any;
 
   constructor(private route: ActivatedRoute, private machinesService: MachinesService) { }
