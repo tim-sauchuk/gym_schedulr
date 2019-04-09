@@ -8,7 +8,7 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #111;
+  background-color: #E8F5FF;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -18,12 +18,12 @@ body {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: #424242;
   display: block;
   transition: 0.3s;
 }
 .sidebar a:hover {
-  color: #f1f1f1;
+  color: #7f7e7e;
 }
 .sidebar .closebtn {
   position: absolute;
@@ -35,14 +35,15 @@ body {
 .openbtn {
   font-size: 20px;
   cursor: pointer;
-  background-color: #111;
-  color: white;
+  background-color: #E8F5FF;
+  color: #424242;
   padding: 10px 15px;
   border: none;
+  border: 1px solid black;
 }
 
 .openbtn:hover {
-  background-color: #444;
+  background-color: #c4def2;
 }
 #main {
   transition: margin-left .5s;
