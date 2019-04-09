@@ -47,7 +47,7 @@ export class AvailabilityComponent implements OnInit {
         ['1AM', 10]
       ]);
     }
-    else if (machineType == 'Treadmills') {
+    else if (machineType == 'Bench Press') {
       var data = google.visualization.arrayToDataTable([
         ['Time', 'Percentage of ' + machineType + ' in Use'],
         ['5AM',  30],
@@ -73,7 +73,7 @@ export class AvailabilityComponent implements OnInit {
         ['1AM', 40]
       ]);
     }
-    else if (machineType == 'Squat Racks') {
+    else if (machineType == 'Leg Press') {
       var data = google.visualization.arrayToDataTable([
         ['Time', 'Percentage of ' + machineType + ' in Use'],
         ['5AM',  0],
@@ -99,7 +99,7 @@ export class AvailabilityComponent implements OnInit {
         ['1AM', 20]
       ]);
     }
-    else if (machineType == 'Stairmasters') {
+    else if (machineType == 'Squat Rack') {
       var data = google.visualization.arrayToDataTable([
         ['Time', 'Percentage of ' + machineType + ' in Use'],
         ['5AM',  20],
