@@ -6,12 +6,12 @@
   </a>
 </h1>
 <div id="reservation_page">
-  <div class="page-top">
-    <div id="reservation_page_date_picker">
-      <div class="reservation-page-date">
+  <div class="routines-page-top">
+    <div class="routines_date_picker">
+      <div >
         <label>
           Date
-          <input type="date" name="date" value="{{date}}">
+          <input type="date" name="date" (change)="onDateChange($event)" value="{{date}}">
         </label>
       </div>
     </div>

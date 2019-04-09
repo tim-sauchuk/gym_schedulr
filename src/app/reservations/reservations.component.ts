@@ -43,6 +43,11 @@ export class ReservationsComponent implements OnInit {
     this.generateMachineData(this.type);
   }
 
+  public onDateChange(obj) {
+    this.fromDate = obj.target.value;
+    console.log(this.fromDate);
+  }
+
   private async generateMachineData(type): Promise<any> {
     this.allMachines = await this.machinesService.getMachines();
     this.reservations = await this.machinesService.getReservations();
@@ -196,7 +201,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   isMachineReservedAtTime(givenMachine, time) {
-    const result =  _.some(givenMachine.reservedTimes, (entry) => entry.time === time);
+    const result =  _.some(givenMachine.reservedTimes, (entry) => entry.time === time && entry.date === this.fromDate);
     return result;
   }
 
