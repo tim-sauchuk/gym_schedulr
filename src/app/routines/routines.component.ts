@@ -19,8 +19,7 @@ export class RoutinesComponent implements OnInit {
     const allMachines = await this.machinesService.getMachines();
     this.allReservations = await this.machinesService.getReservations();
     this.filterForSelectedDate();
-
-    this.reservedMachines = this.allReservations;
+    this.reservedMachines = _.sortBy(this.reservedMachines, (reservation) => reservation.time);
     _.forEach(this.reservedMachines, (machine) => {
         machine.machine_reference = _.find(allMachines, (reg) => reg.id === machine.machine_id);
       });
