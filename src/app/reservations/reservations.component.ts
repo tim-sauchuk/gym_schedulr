@@ -122,31 +122,57 @@ export class ReservationsComponent implements OnInit {
       return _.slice(_.get(this.machineData[0], 'machines'), startIndex, startIndex + 4);
   }
 
+  public checkForFourInARow(machine, selectedMachines) {
+    let numberOfConsecutive = 1;
+    const updatedReservedTimes = _.concat(machine.reservedTimes, _.filter(selectedMachines,
+      (selected) => selected.machine.id === machine.id));
+
+    for (let i = 0; i < updatedReservedTimes.length - 1; i++) {
+        const currSplit = _.split(updatedReservedTimes[i].time, ':');
+        const nextSplit = _.split(updatedReservedTimes[i + 1].time, ':');
+        if ((parseInt(currSplit[1], 10) === (parseInt(nextSplit[1], 10) - 10) && currSplit[0] === nextSplit[0])
+        || (_.parseInt(currSplit[1], 10) === 50 && !parseInt(nextSplit[1], 10)
+            && _.parseInt(currSplit[0], 10) === (_.parseInt(nextSplit[0], 10) - 1))) {
+          numberOfConsecutive ++;
+        }
+      }
+    return numberOfConsecutive > 4;
+  }
+
   public async reserve() {
-    // post to DB reservation
+    const bookingString = _.map(this.selectedMachines, (selected) =>
+      `${selected.machine.machine_type} ${selected.machine.machine_type_id} at ${selected.time}, ${selected.date}`).join('\n');
+
     if (this.selectedMachines.length) {
       let invalidReservations = false;
+      let tooManyReservations = false;
+      const uniqueMachines = _.uniq(_.map(this.selectedMachines, (s) => s.machine));
 
-      const selected = this.selectedMachines.slice();
-      _.forEach((selected), async (entry) => {
-        if (!this.isMachineReservedAtTime(entry.machine, entry.time)) {
-          this.toggleSelection(entry.machine, entry.time);
-          const reservedMachine = _.find(this.allMachines, (machine) => machine.id === entry.machine.id);
-          reservedMachine.reservedTimes.push({date: this.fromDate, time: entry.time});
-
-          await this.machinesService.reserveMachine(entry.machine, entry.time, this.fromDate);
-          this.reservationsMade++;
-        } else {
-          invalidReservations = true;
+      _.forEach(uniqueMachines, (unique) => {
+        if (this.checkForFourInARow(unique, this.selectedMachines)) {
+          tooManyReservations = true;
+          alert('Cannot reserve more than four consecutive time slots for same machine.');
         }
       });
 
+      if (!tooManyReservations) {
+        const selected = this.selectedMachines.slice();
+        _.forEach((selected), async (entry) => {
+          if (!this.isMachineReservedAtTime(entry.machine, entry.time)) {
+            this.toggleSelection(entry.machine, entry.time);
+            await this.machinesService.reserveMachine(entry.machine, entry.time, this.fromDate);
+            entry.machine.reservedTimes.push({time: entry.time, date:this.fromDate});
+            this.reservationsMade++;
+          } else {
+            invalidReservations = true;
+          }
+        });
+      }
+
       if (invalidReservations) {
-        alert('Cannot reserve machines that have already been reserved.');
-      } else {
-        alert('Booking successful for: ' + _.uniq(_.map(this.selectedMachines, (machine) =>
-          `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n')
-          + '\nYou can view your reservation in the Routines page!');
+        alert('Cannot reserve machines that have already been reserved');
+      } else if (!tooManyReservations) {
+        alert('Booking successful for: \n' + bookingString);
       }
     }
   }
