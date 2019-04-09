@@ -21,6 +21,7 @@ export class ReservationsComponent implements OnInit {
   private allMachines: any;
   private showReserve: boolean;
   private showUndoReserve: boolean;
+  private reservations: any;
 
   constructor(private route: ActivatedRoute, private machinesService: MachinesService) { }
 
@@ -44,21 +45,30 @@ export class ReservationsComponent implements OnInit {
 
   private async generateMachineData(type): Promise<any> {
     this.allMachines = await this.machinesService.getMachines();
-    let numOfReservations = 0;
+    this.reservations = await this.machinesService.getReservations();
+
     _.forEach(this.allMachines, (machine) => {
-      if (!machine.available) {
-        numOfReservations++;
-      }
-      machine.name = `${machine.machine_type} ${machine.id}`;
-      machine.isSelected = false;
+      machine.reservedTimes = [];
     });
 
-    this.reservationsMade = numOfReservations;
+    _.forEach(this.reservations, (reservation) => {
+      let thing = _.find(this.allMachines, (m) => m.id === reservation.machine_id);
+      thing.reservedTimes.push({date: reservation.date, time: reservation.time});
+    });
+
     this.filterVisibleMachines(type);
   }
 
+  private padToTwo(num): string {
+    if (num < 10) {
+      return `0${num}`;
+    } else {
+      return num;
+    }
+  }
+
   private filterVisibleMachines(type): void {
-    let machines;
+    let machines = this.allMachines;
     if (!type || type === 'all') {
       machines = this.allMachines;
     } else {
@@ -66,10 +76,16 @@ export class ReservationsComponent implements OnInit {
     }
 
     const machineData = [];
-    this.timeSlots = _.uniq(_.map(machines, (machine) => machine.time));
+    let slots = [];
+    for (let j = 5; j < 24; j++) {
+      for (let i = 0; i < 6; i++) {
+        slots.push(`${this.padToTwo(j)}:${this.padToTwo(i * 10)}`);
+      }
+    }
+
+    this.timeSlots = slots;
     _.forEach(this.timeSlots, (slot) => {
-      const machinesForSlot = _.filter(machines, (machine) => (machine.time === slot));
-      machineData.push({time: slot, machines: _.sortBy(machinesForSlot, (machine) => machine.id + machine.machine_type)});
+      machineData.push({time: slot, machines});
     });
 
     this.machineData = machineData;
@@ -79,27 +95,22 @@ export class ReservationsComponent implements OnInit {
     return this.timeSlots;
   }
 
-  public toggleSelection(machine) {
-    let timeConflict = false;
-    _.forEach(this.selectedMachines, (selMachine) => {
-      if (selMachine.time === machine.time && selMachine.machine_type !== machine.machine_type) {
-        timeConflict = true;
-      }});
-
-    if (!timeConflict) {
-      machine.isSelected = !machine.isSelected;
-
-      if (machine.isSelected) {
-        this.selectedMachines.push(machine);
+  public toggleSelection(machine, time) {
+      if (_.some(this.selectedMachines, (entry) => entry.machine.id === machine.id && entry.time === time && entry.date === this.fromDate)) {
+        _.remove(this.selectedMachines, (entry) => entry.time === time && entry.machine.id === machine.id);
       } else {
-        _.remove(this.selectedMachines, (selectedMachine) => selectedMachine.time === machine.time &&
-          selectedMachine.machine_type === machine.machine_type && selectedMachine.id === machine.id);
+        this.selectedMachines.push({machine, time, date: this.fromDate});
       }
 
-      const selected = this.selectedMachines.slice();
-      this.showReserve = selected.length && _.some(this.selectedMachines, (sM) => sM.available);
-      this.showUndoReserve = selected.length && _.some(this.selectedMachines, (sM) => !sM.available);
-    }
+      this.showReserve = this.selectedMachines.length && _.every(this.selectedMachines, (selected) => {
+        return !_.some(this.reservations, (reservation) => reservation.machine_id === selected.machine.id
+        && reservation.time === time && reservation.date === this.fromDate);
+      });
+
+      this.showUndoReserve = this.selectedMachines.length && _.every(this.selectedMachines, (selected) => {
+        return _.some(this.reservations, (reservation) => reservation.machine_id === selected.machine.id
+        && reservation.time === time && reservation.date === this.fromDate);
+      });
   }
 
   public nextPage() {
@@ -111,27 +122,19 @@ export class ReservationsComponent implements OnInit {
       return _.slice(_.get(this.machineData[0], 'machines'), startIndex, startIndex + 4);
   }
 
-  public getMachinesByTime(givenTime) {
-      const startIndex = this.page * this.machinesPerPage;
-      return _.slice(_.get(_.find(this.machineData, (data) => data.time === givenTime), 'machines'), startIndex, startIndex + 4);
-  }
-
   public async reserve() {
     // post to DB reservation
-    const selected = this.selectedMachines.slice();
-
-    if (selected.length) {
+    if (this.selectedMachines.length) {
       let invalidReservations = false;
-      const machines = _.flatten(_.map(this.machineData, (data) => data.machines));
 
-      _.forEach((selected), async (selectedMachine) => {
-        const machine = _.find(machines, (target) => target.machine_type === selectedMachine.machine_type &&
-          target.time === selectedMachine.time && target.id === selectedMachine.id);
-        if (machine.available) {
-          this.toggleSelection(machine);
-          machine.available = !machine.available;
+      const selected = this.selectedMachines.slice();
+      _.forEach((selected), async (entry) => {
+        if (!this.isMachineReservedAtTime(entry.machine, entry.time)) {
+          this.toggleSelection(entry.machine, entry.time);
+          const reservedMachine = _.find(this.allMachines, (machine) => machine.id === entry.machine.id);
+          reservedMachine.reservedTimes.push({date: this.fromDate, time: entry.time});
 
-          await this.machinesService.reserveMachine(machine);
+          await this.machinesService.reserveMachine(entry.machine, entry.time, this.fromDate);
           this.reservationsMade++;
         } else {
           invalidReservations = true;
@@ -141,7 +144,7 @@ export class ReservationsComponent implements OnInit {
       if (invalidReservations) {
         alert('Cannot reserve machines that have already been reserved.');
       } else {
-        alert('Booking successful for: ' + _.uniq(_.map(selected, (machine) =>
+        alert('Booking successful for: ' + _.uniq(_.map(this.selectedMachines, (machine) =>
           `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n')
           + '\nYou can view your reservation in the Routines page!');
       }
@@ -152,19 +155,29 @@ export class ReservationsComponent implements OnInit {
     const selected = this.selectedMachines.slice();
 
     if (selected.length) {
-      if (_.some((selected), (selectedMachine) => (selectedMachine.available))) {
+      if (_.some((selected), (selectedMachine) => _.includes(_.map(this.reservations, (res) => res.machine_id), selectedMachine.id))) {
        return alert('Cannot undo a reservation for an open machine.');
       } else {
-        _.forEach((selected), async (machine) => {
-          this.toggleSelection(machine);
-          machine.available = !machine.available;
-
-          await this.machinesService.unreserveMachine(machine);
+        _.forEach((selected), async (entry) => {
+          this.toggleSelection(entry.machine, entry.time);
+          entry.machine.reservedTimes = entry.machine.reservedTimes.filter((data) => data.time !== entry.time);
+          await this.machinesService.unreserveMachine(entry.machine.id);
         });
         alert('Reservation undone for: ' + _.uniq(_.map(selected, (machine) =>
           `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n'));
       }
     }
+  }
+
+  isMachineReservedAtTime(givenMachine, time) {
+    const result =  _.some(givenMachine.reservedTimes, (entry) => entry.time === time);
+    return result;
+  }
+
+  isMachineSelectedAtTime(machine, time) {
+    return _.some(this.selectedMachines, (entry) => {
+      return entry.machine.id === machine.id && time === entry.time;
+    });
   }
 
   onSelect() {

@@ -4,9 +4,9 @@
     <div id="dropdown">
       <select id="machine_dropdown"(change)="onSelect()">
         <option value="all">All Machines</option>
-        <option value="Treadmill">Treadmills</option>
-        <option value="Stairmaster">Stairmasters</option>
-        <option value="Squat Rack">Squat Racks</option>
+        <option value="bench press">Bench Press</option>
+        <option value="leg press">Leg Press</option>
+        <option value="squat rack">Squat Racks</option>
       </select>
     </div>
     <div id="reservation_page_date_picker">
@@ -24,18 +24,19 @@
     <table class="reservation_table">
       <th colspan="1">Time</th>
       <th *ngFor="let machine of getChunkedMachines()">
-        {{machine.machine_type}} {{machine.id}}
+        {{machine.machine_type}} {{machine.machine_type_id}}
       </th>
       <tr *ngFor="let time of getTimeSlots()">
         <td>{{time}}</td>
-        <td *ngFor="let machine of getMachinesByTime(time)" (click)="toggleSelection(machine)" [ngClass]="{selected: machine.isSelected, selectable: machine.available}">
-          <div *ngIf="machine.available">
+        <td *ngFor="let machine of getChunkedMachines()" (click)="toggleSelection(machine, time)"
+            [ngClass]="{selected: isMachineSelectedAtTime(machine, time), selectable: !isMachineSelectedAtTime(machine, time)}">
+          <div *ngIf="!isMachineReservedAtTime(machine, time)">
             <p>
               <span class="check">&#10004; </span>
               <span>Open</span>
             </p>
           </div>
-          <div *ngIf="!machine.available">
+          <div *ngIf="isMachineReservedAtTime(machine, time)">
             <p>
               <span class="x">&#x2717; </span>
             </p>
@@ -44,17 +45,19 @@
       </tr>
     </table>
     <div id="reserve_page_buttons">
-      <div id="see_more_less_buttons">
-        <button class="btn btn-default btn-half" [disabled]="page <= 0" type="button" (click)="lastPage()">
-          <i class="fa fa-angle-left" aria-hidden="true"></i>
-          Last</button>
-        <button class="btn btn-default" type="button" (click)="nextPage()">
-          <i class="fa fa-angle-right" aria-hidden="true"></i>
-          Next</button>
-      </div>
-      <div class="rest-of-buttons">
-        <button class="btn btn-default btn-full" [disabled]="!showUndoReserve" type="button" (click)="undoReserve()">Remove Reserve</button>
-        <button class="btn btn-default btn-full" [disabled]="!showReserve" id="reserve_button" type="button" (click)="reserve()">Reserve</button>
+      <div class="please-buttons">
+        <div id="see_more_less_buttons">
+          <button class="btn btn-default btn-half" [disabled]="page <= 0" type="button" (click)="lastPage()">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+            Last</button>
+          <button class="btn btn-default" type="button" (click)="nextPage()">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            Next</button>
+        </div>
+        <div class="rest-of-buttons">
+          <button class="btn btn-default btn-full" [disabled]="!showUndoReserve" type="button" (click)="undoReserve()">Remove Reserve</button>
+          <button class="btn btn-default btn-full" [disabled]="!showReserve" id="reserve_button" type="button" (click)="reserve()">Reserve</button>
+        </div>
       </div>
     </div>
   </div>
