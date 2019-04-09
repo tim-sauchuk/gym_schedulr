@@ -32,7 +32,7 @@ export class RoutinesComponent implements OnInit {
   }
 
   async remove(machine) {
-    await this.machinesService.unreserveMachine(machine.id)
+    await this.machinesService.deleteReservation(machine.id)
       .then(() => {
         _.remove(this.reservedMachines, (reservedMachine) => (reservedMachine as any).id === machine.id);
         _.remove(this.allReservations, (reservedMachine) => (reservedMachine as any).id === machine.id);
@@ -41,7 +41,6 @@ export class RoutinesComponent implements OnInit {
 
   onDateChange(obj) {
     this.date = obj.target.value;
-    console.log(this.date);
     this.filterForSelectedDate();
   }
 }

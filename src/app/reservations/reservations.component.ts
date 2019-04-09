@@ -45,7 +45,6 @@ export class ReservationsComponent implements OnInit {
 
   public onDateChange(obj) {
     this.fromDate = obj.target.value;
-    console.log(this.fromDate);
   }
 
   private async generateMachineData(type): Promise<any> {
@@ -112,7 +111,7 @@ export class ReservationsComponent implements OnInit {
         && reservation.time === time && reservation.date === this.fromDate);
       });
 
-      this.showUndoReserve = this.selectedMachines.length && _.every(this.selectedMachines, (selected) => {
+      this.showUndoReserve = this.selectedMachines.length && _.some(this.selectedMachines, (selected) => {
         return _.some(this.reservations, (reservation) => reservation.machine_id === selected.machine.id
         && reservation.time === time && reservation.date === this.fromDate);
       });
@@ -127,7 +126,7 @@ export class ReservationsComponent implements OnInit {
       return _.slice(_.get(this.machineData[0], 'machines'), startIndex, startIndex + 4);
   }
 
-  public checkForFourInARow(machine, selectedMachines) {
+  private checkForFourInARow(machine, selectedMachines) {
     let numberOfConsecutive = 1;
     const updatedReservedTimes = _.concat(machine.reservedTimes, _.filter(selectedMachines,
       (selected) => selected.machine.id === machine.id));
@@ -144,6 +143,10 @@ export class ReservationsComponent implements OnInit {
     return numberOfConsecutive > 4;
   }
 
+  private checkMultipleSameTime(selected) {
+    return _.uniq(_.map(selected, (s) => s.time)).length === selected.length;
+  }
+
   public async reserve() {
     const bookingString = _.map(this.selectedMachines, (selected) =>
       `${selected.machine.machine_type} ${selected.machine.machine_type_id} at ${selected.time}, ${selected.date}`).join('\n');
@@ -152,6 +155,7 @@ export class ReservationsComponent implements OnInit {
       let invalidReservations = false;
       let tooManyReservations = false;
       const uniqueMachines = _.uniq(_.map(this.selectedMachines, (s) => s.machine));
+      const noRepeatTimes = this.checkMultipleSameTime(this.selectedMachines)
 
       _.forEach(uniqueMachines, (unique) => {
         if (this.checkForFourInARow(unique, this.selectedMachines)) {
@@ -160,13 +164,18 @@ export class ReservationsComponent implements OnInit {
         }
       });
 
-      if (!tooManyReservations) {
+      if (!noRepeatTimes)  {
+        alert('Cannot reserve more reserve multiple machines for the same time.');
+      }
+
+      if (!tooManyReservations && noRepeatTimes) {
         const selected = this.selectedMachines.slice();
         _.forEach((selected), async (entry) => {
           if (!this.isMachineReservedAtTime(entry.machine, entry.time)) {
             this.toggleSelection(entry.machine, entry.time);
             await this.machinesService.reserveMachine(entry.machine, entry.time, this.fromDate);
-            entry.machine.reservedTimes.push({time: entry.time, date:this.fromDate});
+            entry.machine.reservedTimes.push({time: entry.time, date: this.fromDate});
+            this.reservations.push({machine_id: entry.machine.id, time: entry.time, date: this.fromDate});
             this.reservationsMade++;
           } else {
             invalidReservations = true;
@@ -176,13 +185,16 @@ export class ReservationsComponent implements OnInit {
 
       if (invalidReservations) {
         alert('Cannot reserve machines that have already been reserved');
-      } else if (!tooManyReservations) {
+      } else if (!tooManyReservations && noRepeatTimes) {
         alert('Booking successful for: \n' + bookingString);
       }
     }
   }
 
   public async undoReserve() {
+    const bookingString = _.map(this.selectedMachines, (selectedM) =>
+      `${selectedM.machine.machine_type} ${selectedM.machine.machine_type_id} at ${selectedM.time}, ${selectedM.date}`).join('\n');
+
     const selected = this.selectedMachines.slice();
 
     if (selected.length) {
@@ -192,10 +204,10 @@ export class ReservationsComponent implements OnInit {
         _.forEach((selected), async (entry) => {
           this.toggleSelection(entry.machine, entry.time);
           entry.machine.reservedTimes = entry.machine.reservedTimes.filter((data) => data.time !== entry.time);
-          await this.machinesService.unreserveMachine(entry.machine.id);
+          await this.machinesService.deleteReservationByMachine(entry.machine.id, entry.time, entry.date);
         });
-        alert('Reservation undone for: ' + _.uniq(_.map(selected, (machine) =>
-          `${machine.machine_type} ${machine.id} for${machine.time}`)).join('\n'));
+
+        alert('Reservation undone for: \n' + bookingString);
       }
     }
   }

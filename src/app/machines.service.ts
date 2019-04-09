@@ -22,8 +22,15 @@ export class MachinesService {
     }).then((response) => response.json());
   }
 
-  unreserveMachine(id) {
+  deleteReservation(id) {
     return fetch(`${this.base}/reservations/${id}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'}
+    }).then((response) => response.json());
+  }
+
+  deleteReservationByMachine(id, time, date) {
+    return fetch(`${this.base}/reservations/${id}/${time}/${date}`, {
       method: 'DELETE',
       headers: {'Content-Type': 'application/json'}
     }).then((response) => response.json());
