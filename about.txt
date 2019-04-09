@@ -8,7 +8,6 @@ password: 4e7070c0d8584c74e64688cfa6960bd4f5c0ffae596aa95e1503f88cddbf1c1d
 Columns:
 - id (int, primary key)
 - machine id (int, foreign key to "machines" table)
-- user_id (int, starting with 1)
 - start_time (timestamp)
 - end_time (timestamp)
 

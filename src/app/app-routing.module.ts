@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {PolicyComponent} from "./policy/policy.component";
 import {ReservationsComponent} from "./reservations/reservations.component";
 import {RoutinesComponent} from "./routines/routines.component";
 import {AvailabilityComponent} from "./availability/availability.component";
 import {HomeComponent} from "./home/home.component";
+import {MapComponent} from "./map/map.component";
 
 const routes: Routes = [
   {
@@ -29,6 +31,14 @@ const routes: Routes = [
   {
     path: 'availability',
     component: AvailabilityComponent
+  },
+  {
+    path: 'policy',
+    component: PolicyComponent
+  },
+  {
+    path: 'map',
+    component: MapComponent
   }
 ];
 

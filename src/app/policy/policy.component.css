@@ -1,56 +1,12 @@
-.home_page_machines {
-  margin: auto;
-  width: 90%;
-  border-bottom: 2px solid;
-  border-right: 2px solid;
-  border-left: 2px solid;
+h1 {
+	text-align: center;
+}
+.policy-info {
+	padding-left: 1%;
 }
 
-.home_page_machine {
-  height: 120px;
-  border-top: 2px solid;
-  display: flex;
-  flex-direction: row;
-  text-align: left;
-  justify-content: space-between;
-}
-
-.home_page_machine:hover  {
-  cursor: pointer;
-  background-color: rgba(30, 154, 255, .1)
-}
-
-.machine_title {
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 10px;
-  width: 300px;
-  font-size: 40px;
-}
-
-.machine_icon {
-  border: 2px solid gray;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 8px;
-  width: 100px;
-  height: 100px;
-  padding-bottom: 5px;
-}
-
-.machine_availability {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 300px;
-  padding-right: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h4 {
-  text-align: center;
-  padding-bottom: 5px;
+button {
+	margin-left: 1%; 
 }
 
 .btn-half {
@@ -61,6 +17,7 @@ h4 {
 .btn-full {
   width:100%;
 }
+
 #reserve_page_buttons {
   width:10%;
   border: #111111;
@@ -101,7 +58,7 @@ h4 {
 }
 
 button {
-  width: 75px;
+	
 }
 
 table {
