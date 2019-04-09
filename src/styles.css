@@ -57,3 +57,13 @@ th {
   color: white;
 }
 
+input[type=date] {
+  border: 2px solid dodgerblue;
+  border-radius: 4px;
+}
+
+.routines-page-top {
+  margin-left:45%;
+  margin-right:55%;
+}
+

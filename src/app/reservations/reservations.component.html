@@ -11,12 +11,8 @@
     </div>
     <div id="reservation_page_date_picker">
       <div class="reservation_page_date">
-        <label>From</label>
-        <input type="date" name="from_date" value="{{fromDate}}">
-      </div>
-      <div class="reservation_page_date">
-        <label>To</label>
-        <input type="date" name="to_date" value="{{toDate}}">
+        <label>Date</label>
+        <input type="date" (change)="onDateChange($event)" name="from_date" value="{{fromDate}}">
       </div>
     </div>
   </div>
