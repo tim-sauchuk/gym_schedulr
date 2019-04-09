@@ -27,6 +27,8 @@ export class RoutinesComponent implements OnInit {
 
   async remove(machine) {
     await this.machinesService.unreserveMachine(machine.id)
-      .then(() => _.remove(this.reservedMachines, (reservedMachine) => reservedMachine === machine));
+      .then(() => _.remove(this.reservedMachines, (reservedMachine) => {
+        return (reservedMachine as any).id === machine.id;
+      }));
   }
 }

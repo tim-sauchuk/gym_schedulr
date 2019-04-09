@@ -46,8 +46,8 @@
     </table>
     <div id="reserve_page_buttons">
       <div class="please-buttons">
-        <div id="see_more_less_buttons">
-          <button class="btn btn-default btn-half" [disabled]="page <= 0" type="button" (click)="lastPage()">
+        <div id="see_more_less_buttons" class="btn-group">
+          <button class="btn btn-default" [disabled]="page <= 0" type="button" (click)="lastPage()">
             <i class="fa fa-angle-left" aria-hidden="true"></i>
             Last</button>
           <button class="btn btn-default" type="button" (click)="nextPage()">
@@ -57,6 +57,16 @@
         <div class="rest-of-buttons">
           <button class="btn btn-default btn-full" [disabled]="!showUndoReserve" type="button" (click)="undoReserve()">Remove Reserve</button>
           <button class="btn btn-default btn-full" [disabled]="!showReserve" id="reserve_button" type="button" (click)="reserve()">Reserve</button>
+          <div id="see_more_less_buttons" class="btn-group">
+            <button class="btn btn-default" type="button" routerLink="/routines">
+              <i class="fa fa-list-ul" aria-hidden="true"></i><br>
+              View Routine
+            </button>
+            <button class="btn btn-default" type="button" routerLink="/map">
+              <i class="fa fa-map" aria-hidden="true"></i>
+              View Map
+            </button>
+          </div>
         </div>
       </div>
     </div>
