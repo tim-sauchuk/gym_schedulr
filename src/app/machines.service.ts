@@ -7,7 +7,7 @@ export class MachinesService {
   private base: string;
 
   constructor() {
-    this.base = 'http://localhost:3000';
+    this.base = 'https://gym-schedulr-api.herokuapp.com';
   }
 
   getMachines() {
