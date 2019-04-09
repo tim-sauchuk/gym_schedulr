@@ -15,12 +15,18 @@ export class RoutinesComponent implements OnInit {
 
   async ngOnInit() {
     this.date = new Date().toISOString().slice(0, 10);
-    this.machinesService.getReservedMachines()
-      .then((response) => this.reservedMachines = response);
+    const allMachines = await this.machinesService.getMachines();
+    this.machinesService.getReservations()
+      .then((response) => {
+        this.reservedMachines = response;
+        _.forEach(this.reservedMachines, (machine) => {
+          machine.machine_reference = _.find(allMachines, (reg) => reg.id === machine.machine_id);
+        });
+      });
   }
 
   async remove(machine) {
-    await this.machinesService.unreserveMachine(machine)
-      .then(() =>_.remove(this.reservedMachines, (reservedMachine) => reservedMachine === machine));
+    await this.machinesService.unreserveMachine(machine.id)
+      .then(() => _.remove(this.reservedMachines, (reservedMachine) => reservedMachine === machine));
   }
 }

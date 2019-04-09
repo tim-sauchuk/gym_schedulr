@@ -17,8 +17,13 @@
   width:100%;
 }
 #reserve_page_buttons {
+  position:relative;
   width:10%;
   border: #111111;
+}
+
+.please-buttons {
+  position:fixed;
 }
 
 #see_more_less_buttons {

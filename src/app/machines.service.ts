@@ -7,30 +7,29 @@ export class MachinesService {
   private base: string;
 
   constructor() {
-    this.base = 'http://gym-schedulr-api.herokuapp.com';
+    this.base = 'https://gym-schedulr-api.herokuapp.com';
   }
 
   getMachines() {
     return fetch(`${this.base}/machines`).then((response) => response.json());
   }
 
-  reserveMachine(machine) {
-    return fetch(`${this.base}/machines/${machine.machine_type}/${machine.id}`, {
+  reserveMachine(machine, time, date) {
+    return fetch(`${this.base}/reservations`, {
       method: 'POST',
-      body: JSON.stringify({available: false, time: machine.time}),
+      body: JSON.stringify({machine_id: machine.id, time, date}),
       headers: {'Content-Type': 'application/json'}
     }).then((response) => response.json());
   }
 
-  unreserveMachine(machine) {
-    return fetch(`${this.base}/machines/${machine.machine_type}/${machine.id}`, {
-      method: 'POST',
-      body: JSON.stringify({available: true, time: machine.time}),
+  unreserveMachine(id) {
+    return fetch(`${this.base}/reservations/${id}`, {
+      method: 'DELETE',
       headers: {'Content-Type': 'application/json'}
     }).then((response) => response.json());
   }
 
-  getReservedMachines() {
-    return fetch(`${this.base}/machines?available=false`).then((response) => response.json());
+  getReservations() {
+    return fetch(`${this.base}/reservations`).then((response) => response.json());
   }
 }
